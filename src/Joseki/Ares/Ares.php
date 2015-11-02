@@ -14,13 +14,14 @@ class Ares
         $record = BasicParser::parse(file_get_contents($url));
 
         if (class_exists('SoapClient')) {
-            $client = new SoapClient("http://adisrws.mfcr.cz/adistc/axis2/services/rozhraniCRPDPH.rozhraniCRPDPHSOAP");
+            $client = @new SoapClient("http://adisrws.mfcr.cz/adistc/axis2/services/rozhraniCRPDPH.rozhraniCRPDPHSOAP");
+            if ($client instanceof SoapClient) {
+                $contact = new TaxReliabilityRequest ($id);
+                $params = ["StatusNespolehlivyPlatceRequest" => $contact];
+                $response = $client->__soapCall("getStatusNespolehlivyPlatce", $params);
 
-            $contact = new TaxReliabilityRequest ($id);
-            $params = ["StatusNespolehlivyPlatceRequest" => $contact];
-            $response = $client->__soapCall("getStatusNespolehlivyPlatce", $params);
-
-            $record = TaxReliabilityParser::parse($response, $record);
+                $record = TaxReliabilityParser::parse($response, $record);
+            }
         }
 
         return $record;
