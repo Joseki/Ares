@@ -1,0 +1,30 @@
+{
+    "name": "joseki/ares",
+    "type": "library",
+    "description": "Ares is a component for Nette Framework applications.",
+    "keywords": ["joseki", "ares", "grid"],
+    "license": "MIT",
+    "authors": [{
+        "name": "Miroslav Paulik",
+        "email": "miras.paulik@seznam.cz",
+        "homepage": "http://mirapaulik.cz",
+        "role": "Lead Developer"
+    }],
+    "require": {
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "nette/tester": "~1.0",
+        "nette/utils":"~2.3",
+        "nette/neon":"~2.3"
+    },
+    "autoload": {
+        "classmap": ["src"]
+    },
+    "autoload-dev": {
+        "classmap": ["tests"]
+    },
+    "suggest": {
+        "ext-soap": "*"
+    }
+}
