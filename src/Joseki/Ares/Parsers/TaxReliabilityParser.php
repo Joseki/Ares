@@ -2,36 +2,56 @@
 
 namespace Joseki\Ares\Parsers;
 
-use Joseki\Ares\AresRecord;
 use Joseki\Ares\NotFoundException;
+use Joseki\Ares\Records\BanAccountRecord;
 
 class TaxReliabilityParser
 {
-    public static function parse($response, AresRecord $record = null)
+    public static function isReliable($response)
     {
-        if (!$record) {
-            $record = new AresRecord();
-        }
-
         if ($response->statusPlatceDPH->nespolehlivyPlatce === 'NENALEZEN') {
             throw new NotFoundException();
         }
 
-        $record->setReliability($response->statusPlatceDPH->nespolehlivyPlatce === 'NE');
+        return $response->statusPlatceDPH->nespolehlivyPlatce === 'NE';
+    }
 
+
+
+    public static function parseBankAccountDetails($response)
+    {
+        if ($response->statusPlatceDPH->nespolehlivyPlatce === 'NENALEZEN') {
+            throw new NotFoundException();
+        }
+
+        $bankAccounts = [];
         foreach ((array)$response->statusPlatceDPH->zverejneneUcty->ucet as $accountInfo) {
+            $bankAccounts[] = $banAccount = new BanAccountRecord();
             if (isset($accountInfo->standardniUcet)) {
+                $banAccount->setType(BanAccountRecord::TYPE_STANDARD);
                 if (isset($accountInfo->predcisli)) {
-                    $account = $accountInfo->standardniUcet->predcisli . '-' . $accountInfo->standardniUcet->cislo;
-                } else {
-                    $account = $accountInfo->standardniUcet->cislo;
+                    $banAccount->setPrefix($accountInfo->standardniUcet->predcisli);
                 }
-                $bankCode = $accountInfo->standardniUcet->kodBanky;
-
-                $record->addBankAccount($account, $bankCode);
+                $banAccount->setAccount($accountInfo->standardniUcet->cislo);
+                $banAccount->setBankCode($accountInfo->standardniUcet->kodBanky);
+            } else {
+                $banAccount->setType(BanAccountRecord::TYPE_NONSTANDARD);
+                $banAccount->setAccount($accountInfo->nestandardniUcet->cislo);
             }
         }
 
-        return $record;
+        return $bankAccounts;
+    }
+
+
+
+    public static function parseUnreliableCompanies($response)
+    {
+        $companies = [];
+        foreach ((array)$response->statusPlatceDPH as $info) {
+            $companies[$info->dic] = new \DateTime($info->datumZverejneniNespolehlivosti);
+        }
+
+        return $companies;
     }
 }

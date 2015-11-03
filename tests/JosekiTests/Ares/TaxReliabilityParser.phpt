@@ -2,8 +2,6 @@
 
 namespace JosekiTests\Ares;
 
-use Joseki\Ares\AresRecord;
-use Joseki\Ares\Parsers\BasicParser;
 use Joseki\Ares\Parsers\TaxReliabilityParser;
 use Nette\Neon\Neon;
 use Nette\Utils\ArrayHash;
@@ -14,15 +12,15 @@ require_once __DIR__ . '/../bootstrap.php';
 class TaxReliabilityParserTest extends \Tester\TestCase
 {
 
-    public function testSimpleData()
+    public function testReliability()
     {
         $data = Neon::decode(file_get_contents(__DIR__ . '/files/tax1.neon'));
         $response = ArrayHash::from($data);
+        Assert::true(TaxReliabilityParser::isReliable($response));
 
-        $record = TaxReliabilityParser::parse($response);
-        Assert::true($record instanceof AresRecord);
-
-        Assert::true($record->isReliable());
+        $data = Neon::decode(file_get_contents(__DIR__ . '/files/tax5.neon'));
+        $response = ArrayHash::from($data);
+        Assert::false(TaxReliabilityParser::isReliable($response));
     }
 
 
@@ -32,11 +30,19 @@ class TaxReliabilityParserTest extends \Tester\TestCase
         $data = Neon::decode(file_get_contents(__DIR__ . '/files/tax2.neon'));
         $response = ArrayHash::from($data);
 
-        $record = TaxReliabilityParser::parse($response);
-        Assert::true($record instanceof AresRecord);
+        $bankAccounts = TaxReliabilityParser::parseBankAccountDetails($response);
+        Assert::equal(6, count($bankAccounts));
+    }
 
-        Assert::true($record->isReliable());
-        Assert::equal(5, count($record->getBankAccounts()));
+
+
+    public function testUnreliableCompanies()
+    {
+        $data = Neon::decode(file_get_contents(__DIR__ . '/files/tax4.neon'));
+        $response = ArrayHash::from($data);
+
+        $companies = TaxReliabilityParser::parseUnreliableCompanies($response);
+        Assert::equal(2428, count($companies));
     }
 
 
@@ -47,7 +53,16 @@ class TaxReliabilityParserTest extends \Tester\TestCase
             function () {
                 $data = Neon::decode(file_get_contents(__DIR__ . '/files/tax3.neon'));
                 $response = ArrayHash::from($data);
-                TaxReliabilityParser::parse($response);
+                TaxReliabilityParser::isReliable($response);
+            },
+            'Joseki\Ares\NotFoundException'
+        );
+
+        Assert::exception(
+            function () {
+                $data = Neon::decode(file_get_contents(__DIR__ . '/files/tax3.neon'));
+                $response = ArrayHash::from($data);
+                TaxReliabilityParser::parseBankAccountDetails($response);
             },
             'Joseki\Ares\NotFoundException'
         );

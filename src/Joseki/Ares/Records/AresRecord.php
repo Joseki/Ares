@@ -1,6 +1,6 @@
 <?php
 
-namespace Joseki\Ares;
+namespace Joseki\Ares\Records;
 
 class AresRecord
 {
@@ -33,11 +33,6 @@ class AresRecord
 
     /** @var string */
     private $legalForm;
-
-    /** @var bool|null */
-    private $reliable = null;
-
-    private $bankAccounts = [];
 
 
 
@@ -251,42 +246,5 @@ class AresRecord
         $this->legalForm = $legalForm;
     }
 
-
-
-    /**
-     * @return bool
-     * @throws InvalidStateException
-     */
-    public function isReliable()
-    {
-        if ($this->reliable === null) {
-            throw new InvalidStateException('Reliability not set');
-        }
-        return $this->reliable;
-    }
-
-
-
-    /**
-     * @param bool $reliable
-     */
-    public function setReliability($reliable)
-    {
-        $this->reliable = $reliable;
-    }
-
-
-
-    public function addBankAccount($bankAccount, $bankCode = null)
-    {
-        $this->bankAccounts[] = trim(sprintf('%s/%s', $bankAccount, $bankCode), '/');
-    }
-
-
-
-    public function getBankAccounts()
-    {
-        return $this->bankAccounts;
-    }
 
 }

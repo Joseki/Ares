@@ -3,7 +3,7 @@
 namespace JosekiTests\Ares;
 
 use Joseki\Ares\Ares;
-use Joseki\Ares\AresRecord;
+use Joseki\Ares\Records\AresRecord;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
@@ -11,10 +11,10 @@ require_once __DIR__ . '/../bootstrap.php';
 class AresTest extends \Tester\TestCase
 {
 
-    public function testPamis()
+    public function testAresRequest()
     {
         $ares = new Ares();
-        $record = $ares->getByCompanyId('26266261');
+        $record = $ares->getCompanyInfoById('26266261');
         Assert::true($record instanceof AresRecord);
 
         Assert::equal('26266261', $record->getCompanyId());
@@ -29,6 +29,24 @@ class AresTest extends \Tester\TestCase
         Assert::equal('Společnost s ručením omezeným', $record->getLegalForm());
 
         Assert::equal('Břeclav, Poštorná, třída 1. máje 1369/9a', $record->getAddress());
+    }
+
+
+
+    public function testReliabilityRequest()
+    {
+        $ares = new Ares();
+        Assert::true($ares->isCompanyReliabilityByTaxId('26266261'));
+        Assert::true($ares->isCompanyReliabilityByTaxId('CZ26266261'));
+    }
+
+
+
+    public function testBankAccountsRequest()
+    {
+        $ares = new Ares();
+        $bankAccounts = $ares->getBankAccountDetailsByTaxId('49969242');
+        Assert::equal(6, count($bankAccounts));
     }
 
 }

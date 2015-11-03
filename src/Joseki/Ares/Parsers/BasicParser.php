@@ -2,13 +2,13 @@
 
 namespace Joseki\Ares\Parsers;
 
-use Joseki\Ares\AresRecord;
+use Joseki\Ares\Records\AresRecord;
 use Joseki\Ares\ServerDoesNotResponseException;
 
 class BasicParser
 {
 
-    public static function parse($xml, AresRecord $record = null)
+    public static function parse($xml)
     {
         $aresResponse = simplexml_load_string($xml);
 
@@ -20,9 +20,7 @@ class BasicParser
         $data = $aresResponse->children($ns['are']);
         $elements = $data->children($ns['D'])->VBAS;
 
-        if (!$record) {
-            $record = new AresRecord();
-        }
+        $record = new AresRecord();
         $record->setCompanyId(strval($elements->ICO));
         $record->setTaxId(strval($elements->DIC));
         $record->setCompanyName(strval($elements->OF));

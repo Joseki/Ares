@@ -2,8 +2,8 @@
 
 namespace JosekiTests\Ares;
 
-use Joseki\Ares\AresRecord;
 use Joseki\Ares\Parsers\BasicParser;
+use Joseki\Ares\Records\AresRecord;
 use Tester\Assert;
 
 require_once __DIR__ . '/../bootstrap.php';
