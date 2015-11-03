@@ -31,24 +31,6 @@ class AresTest extends \Tester\TestCase
         Assert::equal('Břeclav, Poštorná, třída 1. máje 1369/9a', $record->getAddress());
     }
 
-
-
-    public function testReliabilityRequest()
-    {
-        $ares = new Ares();
-        Assert::true($ares->isCompanyReliabilityByTaxId('26266261'));
-        Assert::true($ares->isCompanyReliabilityByTaxId('CZ26266261'));
-    }
-
-
-
-    public function testBankAccountsRequest()
-    {
-        $ares = new Ares();
-        $bankAccounts = $ares->getBankAccountDetailsByTaxId('49969242');
-        Assert::equal(6, count($bankAccounts));
-    }
-
 }
 
 \run(new AresTest());
