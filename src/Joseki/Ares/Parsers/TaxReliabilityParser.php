@@ -3,7 +3,7 @@
 namespace Joseki\Ares\Parsers;
 
 use Joseki\Ares\NotFoundException;
-use Joseki\Ares\Records\BanAccountRecord;
+use Joseki\Ares\Records\BankAccountRecord;
 
 class TaxReliabilityParser
 {
@@ -26,16 +26,16 @@ class TaxReliabilityParser
 
         $bankAccounts = [];
         foreach ((array)$response->statusPlatceDPH->zverejneneUcty->ucet as $accountInfo) {
-            $bankAccounts[] = $banAccount = new BanAccountRecord();
+            $bankAccounts[] = $banAccount = new BankAccountRecord();
             if (isset($accountInfo->standardniUcet)) {
-                $banAccount->setType(BanAccountRecord::TYPE_STANDARD);
+                $banAccount->setType(BankAccountRecord::TYPE_STANDARD);
                 if (isset($accountInfo->predcisli)) {
                     $banAccount->setPrefix($accountInfo->standardniUcet->predcisli);
                 }
                 $banAccount->setAccount($accountInfo->standardniUcet->cislo);
                 $banAccount->setBankCode($accountInfo->standardniUcet->kodBanky);
             } else {
-                $banAccount->setType(BanAccountRecord::TYPE_NONSTANDARD);
+                $banAccount->setType(BankAccountRecord::TYPE_NONSTANDARD);
                 $banAccount->setAccount($accountInfo->nestandardniUcet->cislo);
             }
         }

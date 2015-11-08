@@ -26,7 +26,7 @@ class BasicParserTest extends \Tester\TestCase
         Assert::equal('778', $record->getStreetHouseNumber());
         Assert::equal('3a', $record->getStreetOrientationNumber());
         Assert::equal('14000', $record->getZip());
-        Assert::equal('Akciová společnost', $record->getLegalForm());
+        Assert::equal('121', $record->getLegalForm());
 
         Assert::equal('Praha 4, Michle, Budějovická 778/3a', $record->getAddress());
     }
@@ -48,7 +48,7 @@ class BasicParserTest extends \Tester\TestCase
         Assert::equal('1369', $record->getStreetHouseNumber());
         Assert::equal('9a', $record->getStreetOrientationNumber());
         Assert::equal('69141', $record->getZip());
-        Assert::equal('Společnost s ručením omezeným', $record->getLegalForm());
+        Assert::equal('112', $record->getLegalForm());
 
         Assert::equal('Břeclav, Poštorná, třída 1. máje 1369/9a', $record->getAddress());
     }

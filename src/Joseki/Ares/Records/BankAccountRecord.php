@@ -2,7 +2,7 @@
 
 namespace Joseki\Ares\Records;
 
-class BanAccountRecord
+class BankAccountRecord
 {
     const TYPE_STANDARD = 'standardniUcet';
     const TYPE_NONSTANDARD = 'nestandardniUcet';

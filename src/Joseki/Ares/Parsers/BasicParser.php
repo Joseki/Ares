@@ -24,7 +24,7 @@ class BasicParser
         $record->setCompanyId(strval($elements->ICO));
         $record->setTaxId(strval($elements->DIC));
         $record->setCompanyName(strval($elements->OF));
-        $record->setLegalForm(strval($elements->PF->NPF));
+        $record->setLegalForm(strval($elements->PF->KPF));
 
         $record->setStreet(strval($elements->AA->NU));
         $record->setStreetHouseNumber(strval($elements->AA->CD));
