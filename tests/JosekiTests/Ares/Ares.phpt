@@ -26,7 +26,7 @@ class AresTest extends \Tester\TestCase
         Assert::equal('1369', $record->getStreetHouseNumber());
         Assert::equal('9a', $record->getStreetOrientationNumber());
         Assert::equal('69141', $record->getZip());
-        Assert::equal('Společnost s ručením omezeným', $record->getLegalForm());
+        Assert::equal('112', $record->getLegalForm());
 
         Assert::equal('Břeclav, Poštorná, třída 1. máje 1369/9a', $record->getAddress());
     }
