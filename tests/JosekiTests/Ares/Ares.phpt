@@ -19,7 +19,7 @@ class AresTest extends \Tester\TestCase
 
         Assert::equal('26266261', $record->getCompanyId());
         Assert::equal('PAMIS CZ s.r.o.', $record->getCompanyName());
-        Assert::equal('CZ26266261', $record->getTaxId());
+        Assert::equal('', $record->getTaxId());
         Assert::equal('Břeclav', $record->getTown());
         Assert::equal('Poštorná', $record->getTownPart());
         Assert::equal('třída 1. máje', $record->getStreet());
@@ -31,6 +31,18 @@ class AresTest extends \Tester\TestCase
         Assert::equal('Břeclav, Poštorná, třída 1. máje 1369/9a', $record->getAddress());
     }
 
+
+
+    public function testInvalid()
+    {
+        Assert::exception(
+            function () {
+                $ares = new Ares();
+                $ares->getCompanyInfoById('99999999');
+            },
+            'Joseki\Ares\NotFoundException'
+        );
+    }
 }
 
 \run(new AresTest());
